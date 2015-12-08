@@ -18,6 +18,15 @@ var createNewTaskElement = function(taskString) {
     var deleteButton = document.createElement("button"); //delete button
     
     //Each element needs to be modified 
+    checkBox.type = "checkbox";
+    editInput.type = "text";
+    
+    editButton.innerText = "Edit";
+    editButton.className = "edit";
+    deleteButton.innerText = "Delete";
+    deleteButton.className = "delete";
+    
+    label.innerText = taskString;
     
     //then appended to the existing list
     listItem.appendChild(checkBox);
@@ -32,7 +41,7 @@ var createNewTaskElement = function(taskString) {
 var addTask = function() {
     console.log("Add task...");
     //When the button is pressed -> new list item with #new-task is created
-    var listItem = createNewTaskElement("Some new task");
+    var listItem = createNewTaskElement(taskInput.value);
     
     //Append listItem to incompleteTasksHolder
     incompleteTasksHolder.appendChild(listItem);
@@ -43,14 +52,25 @@ var addTask = function() {
 //Edit an existing task
 var editTask = function() {
     console.log("Edit task...");
-    //When edit button is pressed // Toggle .editMode on the parent
+    var listItem = this.parentNode;
+    
+    var editInput = listItem.querySelector("input[type=text]");
+    var label = listItem.querySelector("label");
+    
+    var containsClass = listItem.classList.contains("editMode");
+    if(containsClass) {
+        label.innerText = editInput.value;
         //if the clase of parent is .editMode
             //Switch from .editMode
             //label text become the input's value
-        //else 
+    } else {
+        editInput.value = label.innerText;
             //switch to .editMode
             //input value becomes the label's text
+    }
+    listItem.classList.toggle("editMode");
 }
+    
 
 //Delete task
 var deleteTask = function() {
@@ -59,7 +79,7 @@ var deleteTask = function() {
     var listItem = this.parentNode;
     var ul = listItem.parentNode;
     //Remove parent list item from the ul
-    
+    ul.removeChild(listItem);
 }
 
 //Mark task as complete
